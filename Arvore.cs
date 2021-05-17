@@ -49,7 +49,16 @@ namespace ArvoreBinaria
                     Add(no.NoEsquerdo, novo);
                 }
             }
+            
+        }
 
+        public No MenorValor(No no)
+        {
+            if (no.NoEsquerdo == null)
+            {
+                return no;
+            }
+            return MenorValor(no.NoEsquerdo);
         }
 
         public No RemoveNo(No no,int valor)
@@ -59,7 +68,7 @@ namespace ArvoreBinaria
             if(no.Valor > valor)
             {
 
-                no.NoEsquerdo = RemoveNo(no.NoEsquerdo, valor);
+                 no.NoEsquerdo = RemoveNo(no.NoEsquerdo, valor);
             }
             else if(no.Valor < valor){
 
@@ -68,13 +77,27 @@ namespace ArvoreBinaria
             }
             else
             {
-                if(no.NoEsquerdo != null && no.NoDireito != null)
+                if (no.NoEsquerdo != null && no.NoDireito != null)
                 {
-
-
+                    No temp = no;
+                    No no_menor = MenorValor(temp.NoDireito);
+                    no.Valor = no_menor.Valor;
+                    no.NoDireito = RemoveNo(no.NoDireito, no_menor.Valor);
 
 
                 }
+                else if (no.NoEsquerdo != null)
+                {
+
+                    no = no.NoEsquerdo;
+                }
+                else if (no.NoDireito != null)
+                {
+
+                    no = no.NoDireito;
+                }
+                else
+                    no = null;
 
 
             }
@@ -156,6 +179,67 @@ namespace ArvoreBinaria
                 return 1 + Math.Max(RetornaAlturaDaArvore(no.NoEsquerdo), RetornaAlturaDaArvore(no.NoDireito));
 
         }
+
+
+        public int RetornaMaiorElemento(No root)
+        {
+
+            if (root == null)
+            {
+
+                return 0;
+
+            } if(root.NoDireito== null) { return root.Valor; }
+                return RetornaMaiorElemento(root.NoDireito);
+
+
+
+
+
+        }
+
+
+        public void NivelTransversal(No root)
+        {
+            int nivel = 1;
+            while (ImprimeNivel(root, nivel))
+            {
+                nivel++;
+
+
+
+            }
+
+        }
+
+
+        public bool ImprimeNivel(No root,int indice)
+        {
+
+            if(root == null)
+            {
+
+                return false;
+
+            }if(indice == 1)
+            {
+                Console.WriteLine(root.Valor+ " ");
+                return true;
+
+
+
+            }
+
+            bool noEquerdo = ImprimeNivel(root.NoEsquerdo, indice - 1);
+            bool noDireito = ImprimeNivel(root.NoDireito, indice - 1);
+
+            return noEquerdo || noDireito;
+
+
+
+        }
+
+
 
         public override string ToString()
         {
